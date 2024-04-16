@@ -11,26 +11,12 @@ class gps_to_odom{
         ros::Subscriber sub;
         bool flag;
 
+        //reference system data
         float64 ref_latitude ;
         float64 ref_longitude ;
         float64 ref_altitude ;
-        vector<vector<float64>> ref_matrix(3, vector<float64>(3));
-
-        void set_reference_system(float64 latitude, float64 longitude, float64 altitude){
-            ref_latitude = latitude;
-            ref_longitude = longitude;
-            ref_altitude = altitude;
-
-            ref_matrix[0][0]=;
-            ref_matrix[0][1]=;
-            ref_matrix[0][2]=
-            ref_matrix[1][0]=
-            ref_matrix[1][1]=
-            ref_matrix[1][2]=
-            ref_matrix[2][0]=
-            ref_matrix[2][1]=
-            ref_matrix[2][2]=
-        }
+        vector<float64> ref_ecef(3, 0); //ecef format of reference system
+        vector<vector<float64>> ref_matrix(3, vector<float64>(3)); //matrix to obtain enu
 
     public:
         gps_to_odom(){
@@ -103,11 +89,32 @@ class gps_to_odom{
             pose_diff.push_back(ecef[1] - ref_longitude);
             pose_diff.push_back(ecef[2] - ref_altitude);
 
-            this->vectorial_mult(ref_matrix, pose_diff);
-
-            
+            edu = this->vectorial_mult(this->ref_matrix, pose_diff);
 
             return edu;
+        }
+
+        void set_reference_system(float64 latitude, float64 longitude, float64 altitude){
+            
+            ref_latitude = latitude; //theta
+            ref_longitude = longitude; //lambda
+            ref_altitude = altitude; //h
+
+            this->ref_ecef=this->from_gps_to_ECEF(ref_latitude, ref_longitude, ref_altitude);
+
+            //da ricontrollare assolutamenteeee!!!!!!!!!!!!!!!!!!!!
+            ref_matrix[0][0]=-sin(ref_longitude);
+            ref_matrix[0][1]=cos(ref_longitude);
+            ref_matrix[0][2]=0;
+
+            ref_matrix[1][0]=-sin(ref_latitude)*cos(ref_longitude);
+            ref_matrix[1][1]=-sin(ref_latitude)*cos(ref_longitude);
+            ref_matrix[1][2]=cos(ref_latitude);
+
+            ref_matrix[2][0]=cos(ref_latitude)*cos(ref_longitude);
+            ref_matrix[2][1]=cos(ref_latitude)*sin(ref_longitude);
+            ref_matrix[2][2]=sin(ref_latitude);
+
         }
 
         float n_calculation(float64 phi, float e_square){
