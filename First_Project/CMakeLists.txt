@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(first_project)
+
+## Find catkin and any catkin packages
+# specifichiamo i pacchetti che servono all'interno del nostro package in questo caso
+# roscpp std_msgs
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs)
+
+## Declare a catkin package
+catkin_package()
+
+## Build talker and listener
+include_directories(include ${catkin_INCLUDE_DIRS})
+
+# creiamo l'eseguibile dandogli pub come nome
+add_executable(gps_to_odom src/gps_to_odom.cpp)
+target_link_libraries(gps_to_odom ${catkin_LIBRARIES})
+
