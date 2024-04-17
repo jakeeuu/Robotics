@@ -3,6 +3,9 @@
 #include "sensor_msgs/NavSatFi.h"  // in caso :: al posto di /
 #include <cmath>
 #include <vector>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Qaternion.h>
+#include <tf2/LinearMath/Quaternion.h>
 
 class gps_to_odom{
     
@@ -18,8 +21,10 @@ class gps_to_odom{
         vector<float64> ref_ecef(3, 0); //ecef format of reference system
         vector<vector<float64>> ref_matrix(3, vector<float64>(3)); //matrix to obtain enu
 
+        vector<float64> prec_pose(3, 0); //precedent position of the robot, necessary to calculate orientation
+
     public:
-        gps_to_odom(){
+        gps_to_odom(){ 
 
             flag=false;
             sub = n.subscribe("/fix", 1, &gps_to_odom::callback, this);
@@ -38,29 +43,44 @@ class gps_to_odom{
 
         void callback(const sensor_msgs::NavSatFi::::ConstPtr& msg){
 
+
+            nav_msgs:: Odometry odom;
+
             float64 latitude = msg.latitude;
             float64 longitude = msg.longitude;
             float64 altitude = msg.altitude;
 
+            vector<float64> ecef; 
+            vector<float64> enu; //(x, y, z, orientation)
+
             if(!flag){
                 this->set_reference_system(latitude, longitude, altitude);
+                prec_pose=this->from_ECEF_to_ENU(this->from_gps_to_ECEF(latitude, longitude, altitude));
                 flag=true;
             }
 
-            vector<float> ecef;
-
             ecef = this->from_gps_to_ECEF(msg.latitude, msg.longitude, msg.altitude);
+            enu = this->from_ECEF_to_ENU(ecef);
 
 
+            //creating the odometry
+            odom.header.stamp= ros:: Time :: now();
+            odom.header.frame_id="gps_odom";
+            
+            odom.pose.pose.position.x=enu[0]
+            odom.pose.pose.position.y=enu[1]
+            odom.pose.pose.position.z=enu[2]
+
+            odom.pose.pose.orientation= tf2:: toMsg(tf2:: Quaternion(0,0,0,enu[3]))
 
         }
 
-        vector<float> from_gps_to_ECEF(float64 latitude, float64 longitude, float64 altitude ) {
+        vector<float64> from_gps_to_ECEF(float64 latitude, float64 longitude, float64 altitude ) {
 
-            float x;
-            float y;
-            float z;
-            vector<float> ecef;
+            float64 x;
+            float64 y;
+            float64 z;
+            vector<float64> ecef;
 
             int a = 6378137;
             int b = 6356752;
@@ -70,28 +90,28 @@ class gps_to_odom{
             float n = this->n_calculation(latitude, e_square);
 
             ecef.push_back( (n + altitude) * cos(latitude) * cos(longitude) ); //x
-
             ecef.push_back( (n + altitude) * cos(latitude) * sin(longitude) ); //y
-
             ecef.push_back( (n * (1 - e_square) + altitude) * sin(latitude) ); //z
 
             return ecef;
 
         }
 
-        vector<float> from_ECEF_to_ENU(vector<float>& ecef ){
+        vector<float64> from_ECEF_to_ENU(vector<float64>& ecef ){
 
-            vector<float> edu;
-
-            vector<float> pose_diff;
+            vector<float64> enu;
+            vector<float64> pose_diff;
 
             pose_diff.push_back(ecef[0] - ref_latitude);
             pose_diff.push_back(ecef[1] - ref_longitude);
             pose_diff.push_back(ecef[2] - ref_altitude);
 
-            edu = this->vectorial_mult(this->ref_matrix, pose_diff);
+            enu = this->vectorial_mult(this->ref_matrix, pose_diff);
 
-            return edu;
+            edu.push_back(get_orientation(enu, prec_pose));
+            prec_pose=enu;
+
+            return enu;
         }
 
         void set_reference_system(float64 latitude, float64 longitude, float64 altitude){
@@ -102,7 +122,7 @@ class gps_to_odom{
 
             this->ref_ecef=this->from_gps_to_ECEF(ref_latitude, ref_longitude, ref_altitude);
 
-            //da ricontrollare assolutamenteeee!!!!!!!!!!!!!!!!!!!!
+            //da ricontrollare assolutamenteeee!!!!!!!!!!!!!!!!!!!! gradi o radianti ??
             ref_matrix[0][0]=-sin(ref_longitude);
             ref_matrix[0][1]=cos(ref_longitude);
             ref_matrix[0][2]=0;
@@ -137,6 +157,18 @@ class gps_to_odom{
             }
 
             return res;
+        }
+
+        float64 get_orientation(vector<float64> curr_pose, vector<float64> prec_pose){
+
+            float64 y_diff=curr_pose[1]-prec_pose[1];
+            float64 x_diff=curr_pose[0]-prec_pose[0];
+
+            if(x_diff==0) return 0;
+
+            float64 tan_theta=y_diff/x_diff; //the tangent of theta is equal to (y diff)/(x diff)
+            return atan(tan_theta);
+
         }
 }
 
