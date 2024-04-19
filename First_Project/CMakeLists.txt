@@ -2,12 +2,27 @@ cmake_minimum_required(VERSION 2.8.3)
 project(first_project)
 
 ## Find catkin and any catkin packages
-# specifichiamo i pacchetti che servono all'interno del nostro package in questo caso
-# roscpp std_msgs
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs)
+# specifichiamo i pacchetti che servono all'interno del nostro package
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  std_msgs
+  sensor_msgs
+  nav_msgs
+  geometry_msgs
+  tf2
+)
+
 
 ## Declare a catkin package
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS 
+	roscpp 
+	std_msgs 
+	sensor_msgs 
+	nav_msgs 
+	geometry_msgs 
+	tf2
+)
 
 ## Build talker and listener
 include_directories(include ${catkin_INCLUDE_DIRS})
