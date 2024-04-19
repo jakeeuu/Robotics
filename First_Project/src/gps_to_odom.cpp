@@ -23,7 +23,7 @@ private:
     double ref_longitude;
     double ref_altitude;
 
-    std::vector<double> ref_ecef{3, 0.0}; // ecef format of reference system
+    std::vector<double>ref_ecef{3, 0.0}; // ecef format of reference system
     std::vector<double>ref_enu{3, 0.0}; // enu format of reference system
     std::vector<std::vector<double>> ref_matrix{3, std::vector<double>(3)}; // Matrix to obtain ENU
 
@@ -52,7 +52,7 @@ public:
 
         double latitude = msg->latitude*3.14159/180;
         double longitude = msg->longitude*3.14159/180;
-        double altitude = msg->altitude*3.14159/180;
+        double altitude = 0.0; //msg->altitude;
 
 
         std::vector<double> ecef;
@@ -62,12 +62,10 @@ public:
         if (!flag)
         {
             this->set_reference_system(latitude, longitude, altitude);
-            ecef = this->from_gps_to_ECEF(latitude, longitude, altitude);
-            prec_pose = this->from_ECEF_to_ENU(ecef);
+            prec_pose=ref_enu;
             flag = true;
             odom_seq_id = 0;
             ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n enu: x=%f , y=%f , z=%f\n", latitude, longitude, altitude, odom.pose.pose.position.x, odom.pose.pose.position.y, odom.pose.pose.position.z);
-
         }
 
         ecef = this->from_gps_to_ECEF(latitude, longitude, altitude);
@@ -78,7 +76,7 @@ public:
         odom.header.seq = odom_seq_id;
         odom.header.stamp = ros::Time ::now();
         odom.header.frame_id = "gps_odom";
-        odom.child_frame_id = "gps_odom";
+        //odom.child_frame_id = "gps_odom";
         // position
         odom.pose.pose.position.x = enu[0];
         odom.pose.pose.position.y = enu[1];
@@ -117,9 +115,9 @@ public:
         std::vector<double> enu;
         std::vector<double> pose_diff;
 
-        pose_diff.push_back(ecef[0] - ref_latitude);
-        pose_diff.push_back(ecef[1] - ref_longitude);
-        pose_diff.push_back(ecef[2] - ref_altitude);
+        pose_diff.push_back(ecef[0] - ref_ecef[0]);
+        pose_diff.push_back(ecef[1] - ref_ecef[1]);
+        pose_diff.push_back(ecef[2] - ref_ecef[2]);
 
         enu = this->vectorial_mult(this->ref_matrix, pose_diff);
 
@@ -135,7 +133,7 @@ public:
         ref_ecef = this->from_gps_to_ECEF(ref_latitude, ref_longitude, ref_altitude);
         ref_enu = this->from_ECEF_to_ENU(ref_ecef);
 
-        // da ricontrollare assolutamenteeee!!!!!!!!!!!!!!!!!!!! gradi o radianti ??
+        // matrix 
         ref_matrix[0][0] = -sin(ref_longitude);
         ref_matrix[0][1] = cos(ref_longitude);
         ref_matrix[0][2] = 0;
@@ -147,6 +145,7 @@ public:
         ref_matrix[2][0] = cos(ref_latitude) * cos(ref_longitude);
         ref_matrix[2][1] = cos(ref_latitude) * sin(ref_longitude);
         ref_matrix[2][2] = sin(ref_latitude);
+
     }
 
     double n_calculation(double phi, double e_square)
