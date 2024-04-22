@@ -61,7 +61,7 @@ public:
         ros::ROS_INFO("     - child_frame : %s", child_frame.c_str());
         ros::Rate loop_rate(5); */
         ros::Rate loop_rate(5);
-        
+
         while (ros::ok())
         {
             ros::spinOnce();

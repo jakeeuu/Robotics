@@ -65,7 +65,7 @@ public:
             prec_pose=ref_enu;
             flag = true;
             odom_seq_id = 0;
-            ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n enu: x=%f , y=%f , z=%f\n", latitude, longitude, altitude, odom.pose.pose.position.x, odom.pose.pose.position.y, odom.pose.pose.position.z);
+            //ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n enu: x=%f , y=%f , z=%f\n", latitude, longitude, altitude, odom.pose.pose.position.x, odom.pose.pose.position.y, odom.pose.pose.position.z);
         }
 
         ecef = this->from_gps_to_ECEF(latitude, longitude, altitude);
