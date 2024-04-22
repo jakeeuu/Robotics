@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   geometry_msgs
   tf2
+  tf
 )
 
 
@@ -22,6 +23,7 @@ catkin_package(
 	nav_msgs 
 	geometry_msgs 
 	tf2
+  tf
 )
 
 ## Build talker and listener
@@ -29,5 +31,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 # creiamo l'eseguibile dandogli pub come nome
 add_executable(gps_to_odom src/gps_to_odom.cpp)
+add_executable(odom_to_tf src/odom_to_tf.cpp)
 target_link_libraries(gps_to_odom ${catkin_LIBRARIES})
+target_link_libraries(odom_to_tf ${catkin_LIBRARIES})
 

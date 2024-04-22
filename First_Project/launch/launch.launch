@@ -1,8 +1,24 @@
 <launch>
-    <node pkg="first_project" name="gps_to_odom" type="gps_to_odom" output="screen">
-     <param name="lat_r" value="" />  <!--bisogna settare questi value con i dati che arrivano dalla bag e va fatto con il configuration file in python-->
-     <param name="lon_r" value="" />
-     <param name="alt_r" value="" />
+
+    <param name="root_frame" type="string" value="world"/>
+
+    <!-- odom_to_tf node, from wheel encoders-->
+    <node pkg="first_project" type="odom_to_tf" name="wheel_odom_to_tf" output="screen">
+        <param name="input_odom" type="string" value="odom"/>
+        <param name="child_frame" type="string" value="wheel_odom"/>
     </node>
 
+    <!-- odom_to_tf node -->
+    <node pkg="first_project" type="odom_to_tf" name="gps_odom_to_tf" output="screen">
+        <param name="input_odom" type="string" value="gps_odom"/>
+        <param name="child_frame" type="string" value="gps_odom"/>
+    </node>
+
+    <!-- gps_to_odom node -->
+    <node pkg="first_project" type="gps_to_odom" name="gps_to_odom" output="screen"/>
+
+    <!-- starting rviz-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find first_project)/cfg/rviz_config.rviz"/>
+     
 </launch>
+
