@@ -39,14 +39,27 @@ public:
     {
 
         sensor_msgs::PointCloud2 modified_msg = msg;
-        modified_msg.header.frame_id = dyn_frame.c_str();
+        modified_msg.header.frame_id = dyn_frame;
+        modified_msg.header.stamp = ros::Time ::now();
 
         lidar_pub.publish(modified_msg);
     }
 
     void dyn_frame_callback(const first_project::dyn_conf_third_nodeConfig &config, uint32_t level){
 
-        dyn_frame=config.frame_set;
+        int int_dyn_frame=config.frame_set;
+
+        switch(int_dyn_frame){
+            case 0:
+                dyn_frame="wheel_odom";
+                break;
+            case 1:
+                dyn_frame="gps_odom";
+                break;
+            default:
+                dyn_frame="wheel_odom";
+                break;
+        }
         //ros::ROS_INFO(" dyn_frame reconfigured to : %s", dyn_frame);
 
     }
