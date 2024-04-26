@@ -15,7 +15,11 @@
     </node>
 
     <!-- gps_to_odom node -->
-    <node pkg="first_project" type="gps_to_odom" name="gps_to_odom" output="screen"/>
+    <node pkg="first_project" type="gps_to_odom" name="gps_to_odom" output="screen">
+        <param name="lat_r" type="double" value="45.477669461666665" />
+        <param name="lon_r" type="double" value="9.22674018" />
+        <param name="alt_r" type="double" value="169.039" />
+    </node>
 
     <!-- gps_to_odom node -->
     <node pkg="first_project" type="lidar_remap" name="lidar_remap" output="screen"/>
@@ -27,4 +31,23 @@
     <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure"/>
      
 </launch>
+
+<!-- 
+reference system coordinates
+
+1st frame:
+latitude: 45.477669461666665
+longitude: 9.22674018
+altitude: 169.039
+
+2nd frame:
+latitude: 45.47766944833333
+longitude: 9.226740176666667
+altitude: 169.041
+
+3rd frame:
+latitude: 45.477669438333336
+longitude: 9.226740146666666
+altitude: 169.037
+-->
 

@@ -9,7 +9,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
-std::vector<double> vectorial_mult(const std::vector<std::vector<double>>& matrix, const std::vector<double>& vect)
+std::vector<double> vectorial_mult(const std::vector<std::vector<double>> &matrix, const std::vector<double> &vect)
 {
     std::vector<double> res(matrix.size(), 0);
 
@@ -31,7 +31,7 @@ public:
     double longitude; // in radiants
     double altitude;  // in radiants
 
-    gps_coord(){}
+    gps_coord() {}
     gps_coord(double lat, double lng, double alt) // input coords must be in degrees
     {
         this->latitude = deg2rad(lat);
@@ -45,7 +45,6 @@ private:
         double rad = grad * 3.14159 / 180;
         return rad;
     }
-
 };
 
 class ECEF_coord
@@ -56,7 +55,7 @@ public:
     double y;
     double z;
 
-    ECEF_coord(){}
+    ECEF_coord() {}
     ECEF_coord(const gps_coord &gps)
     {
         init_const(gps.latitude);
@@ -71,16 +70,6 @@ public:
         this->y = y;
         this->z = z;
     }
-
-    /*ref_syst& operator=(ref_syst&& other) noexcept {
-        if (this != &other) {
-            // Move data members
-            ecef = std::move(other.ecef);
-            gps = std::move(other.gps);
-            matrix = std::move(other.matrix);
-        }
-        return *this;
-    }*/
 
 private:
     double a = 6378137;
@@ -117,23 +106,11 @@ public:
     ECEF_coord ecef;
     gps_coord gps;
     std::vector<std::vector<double>> matrix;
-
-    Ref_syst(){}
-    Ref_syst(const gps_coord& gps_ref_syst, const ECEF_coord& ecef_ref_syst): gps(gps_ref_syst), ecef(ecef_ref_syst), matrix(get_matrix(gps_ref_syst)){}
-
-    // Move assignment operator
-    /*ref_syst& operator=(ref_syst&& other) noexcept {
-        if (this != &other) {
-            // Move data members
-            ecef = std::move(other.ecef);
-            gps = std::move(other.gps);
-            matrix = std::move(other.matrix);
-        }
-        return *this;
-    }*/
+    Ref_syst() {}
+    Ref_syst(const gps_coord &gps_ref_syst, const ECEF_coord &ecef_ref_syst) : gps(gps_ref_syst), ecef(ecef_ref_syst), matrix(get_matrix(gps_ref_syst)) {}
 
 private:
-    std::vector<std::vector<double>> get_matrix(const gps_coord& gps)
+    std::vector<std::vector<double>> get_matrix(const gps_coord &gps)
     {
         std::vector<std::vector<double>> matrix{3, std::vector<double>(3)};
 
@@ -161,12 +138,24 @@ private:
 
 class ENU_coord
 {
+private:
+    double rotation_angle = 128; // angle in degrees
+    std::vector<double> rotate(double x, double y)
+    {
+        double angle = rotation_angle * 3.14159 / 180;
+        std::vector<double> res;
+        res.push_back(x * cos(angle) - y * sin(angle));
+        res.push_back(x * sin(angle) + y * cos(angle));
+
+        return res;
+    }
+
 public:
     double x;
     double y;
     double z;
 
-    ENU_coord(){}
+    ENU_coord() {}
     ENU_coord(const ECEF_coord &ecef, const Ref_syst &ref_syst)
     { // input coords must be in degrees
 
@@ -178,15 +167,22 @@ public:
 
         res = vectorial_mult(ref_syst.matrix, diff);
 
+        // result without rotattion adjustments
         x = res[0];
         y = res[1];
         z = res[2];
+
+        // now apply the rotation
+        res=rotate(x, y);
+        x = res[0];
+        y = res[1];
+
     }
     ENU_coord(double x, double y, double z)
-    { 
-        this->x=x;
-        this->y=y;
-        this->z=z;
+    {
+        this->x = x;
+        this->y = y;
+        this->z = z;
     }
 };
 
@@ -194,8 +190,7 @@ class gps_to_odom // class of the node
 {
 
 private:
-
-    geometry_msgs::Quaternion get_orientation(ENU_coord& curr_pose, ENU_coord& prec_pose)
+    geometry_msgs::Quaternion get_orientation(ENU_coord &curr_pose, ENU_coord &prec_pose)
     {
         double dx = curr_pose.x - prec_pose.x;
         double dy = curr_pose.y - prec_pose.y;
@@ -218,24 +213,23 @@ private:
     }
 
 public:
-
     ros::NodeHandle n;
+    ros::NodeHandle private_n;
     ros::Subscriber sub;
     ros::Publisher pub;
 
-    bool flag;
     int odom_seq_id;
 
     Ref_syst ref;
     ENU_coord prec_pose;
 
-
-
-    gps_to_odom()
+    gps_to_odom() : private_n("~")
     {
-        flag = false;
+
         sub = n.subscribe("/fix", 1, &gps_to_odom::callback, this);
         pub = n.advertise<nav_msgs::Odometry>("/gps_odom", 1);
+
+        set_ref();
 
         ros::Rate loop_rate(5);
 
@@ -247,28 +241,21 @@ public:
     }
 
     void callback(const sensor_msgs::NavSatFix::ConstPtr &msg)
-    {   
-        gps_coord gps(msg->latitude, msg->longitude, msg->altitude); //gps format of msgs
-        ECEF_coord ecef(gps); // ECEF format of msg
-
+    {
         nav_msgs::Odometry odom;
         tf2::Quaternion quat_orientation;
 
-        if (!flag)
-        {
-            set_ref(gps, ecef);
-            ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", msg->latitude, msg->longitude, msg->altitude, ecef.x, ecef.y, ecef.z, prec_pose.x, prec_pose.y, prec_pose.z  );
-            
-        }
-
-        ENU_coord enu(ecef, ref); //ENU format of msg
-                             //it is calculated here because to compute the ENU is necessary the ref system
+        gps_coord gps(msg->latitude, msg->longitude, msg->altitude); // gps format of msgs
+        ECEF_coord ecef(gps);                                        // ECEF format of msg
+        ENU_coord enu(ecef, ref);                                    // ENU format of msg
+                                  // it is calculated here because to compute the ENU is necessary the ref system
 
         // creating the odometry
         // header
         odom.header.seq = odom_seq_id;
         odom.header.stamp = ros::Time ::now();
         odom.header.frame_id = "gps_odom";
+        odom.child_frame_id = "scout_link";
         // position
         odom.pose.pose.position.x = enu.x;
         odom.pose.pose.position.y = enu.y;
@@ -284,13 +271,33 @@ public:
         prec_pose = enu;
     }
 
-    void set_ref(const gps_coord& gps, const ECEF_coord& ecef)
+    void set_ref()
     {
-        ref = Ref_syst(gps, ecef);
-        prec_pose = ENU_coord(ecef, ref);
-        flag = true;
-    }
+        double lat_r;
+        double lon_r;
+        double alt_r;
 
+        // retrive reference system coordinates
+        if (!private_n.getParam("lat_r", lat_r))
+        {
+            ROS_ERROR("Failed to get parameter lat_r");
+        }
+        if (!private_n.getParam("lon_r", lon_r))
+        {
+            ROS_ERROR("Failed to get parameter lon_r");
+        }
+        if (!private_n.getParam("lon_r", alt_r))
+        {
+            ROS_ERROR("Failed to get parameter alt_r");
+        }
+
+        gps_coord gps_r(lat_r, lon_r, alt_r);
+        ECEF_coord ecef_r(gps_r);
+        ref = Ref_syst(gps_r, ecef_r);
+        prec_pose = ENU_coord(ecef_r, ref);
+
+        ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", lat_r, lon_r, alt_r, ecef_r.x, ecef_r.y, ecef_r.z, prec_pose.x, prec_pose.y, prec_pose.z);
+    }
 };
 
 int main(int argc, char **argv)
