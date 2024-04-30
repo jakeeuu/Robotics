@@ -102,7 +102,6 @@ private:
     { // initialize constants
         e2 = get_e2();
         N = get_N(latitude_in_rad);
-        ROS_INFO(" N: %f", N);
     }
 
     double get_N(double latitude)
@@ -189,7 +188,7 @@ public:
 
         res = vectorial_mult(ref_syst.matrix, diff);
 
-        // result without rotattion adjustments
+        // result without rotation adjustments
         x = res[0];
         y = res[1];
         z = res[2];
@@ -221,7 +220,7 @@ private:
         // Calculate yaw (heading) angle
         double yaw = atan2(dy, dx);
 
-        // Calculate pitch angle
+        // Calculate pitch angle, the pitch is not necessary
         double pitch = atan2(-dz, sqrt(dx * dx + dy * dy));
 
         // Convert Euler angles to quaternion
@@ -287,10 +286,9 @@ public:
 
         pub.publish(odom);
 
-        // ROS_INFO("-----------------------%d\n   input gps: lat=%f , long=%f, height=%f \n   enu: x=%f , y=%f , z=%f \n ",odom_seq_id, latitude, longitude, altitude, odom.pose.pose.position.x, odom.pose.pose.position.y, odom.pose.pose.position.z);
-
         odom_seq_id += 1;
         prec_pose = enu;
+        
     }
 
     void set_ref()
