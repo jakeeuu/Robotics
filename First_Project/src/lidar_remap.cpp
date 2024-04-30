@@ -3,6 +3,20 @@
 #include <dynamic_reconfigure/server.h>
 #include <first_project/dyn_conf_third_nodeConfig.h> //file generated from the python script
 
+/*
+
+Final node for lidar data visualization (called lidar_remap)
+
+- The node subscribe to the /os_cloud_node/points topic and change the frame set in the header
+- The value set in the header is regulated by a dynamic reconfigure callback which allow to dynamically change it to be set to the wheel_odom or gps_odom frame
+- The final node allows the user to select from rqt_reconfigure to which tf the lidar is connected
+- The node publish on the topic /pointcloud_remapped
+
+*/
+
+
+
+
 class lidar_remap
 {
 private:

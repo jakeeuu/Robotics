@@ -9,6 +9,26 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
+/*
+
+publish:
+- odometry message:
+    - type: nav_msgs/Odometry
+    - topic name: gps_odom
+
+- to convert gps data to odometry:
+    - convert (latitude-longitude-altitude) to Cartesian ECEF
+    - convert Cartesian ECEF to ENU
+    - ENU is a relative position, so you need to specify the reference point
+
+- gps_to_odom have three parameters :
+    - lat_r
+    - lon_r
+    - alt_r
+- These parameters are set in the launch file
+
+*/
+
 std::vector<double> vectorial_mult(const std::vector<std::vector<double>> &matrix, const std::vector<double> &vect)
 {
     std::vector<double> res(matrix.size(), 0);
@@ -27,6 +47,7 @@ class gps_coord
 {
 
 public:
+
     double latitude;  // in radiants
     double longitude; // in radiants
     double altitude;  // in radiants
@@ -81,6 +102,7 @@ private:
     { // initialize constants
         e2 = get_e2();
         N = get_N(latitude_in_rad);
+        ROS_INFO(" N: %f", N);
     }
 
     double get_N(double latitude)
@@ -286,7 +308,7 @@ public:
         {
             ROS_ERROR("Failed to get parameter lon_r");
         }
-        if (!private_n.getParam("lon_r", alt_r))
+        if (!private_n.getParam("alt_r", alt_r))
         {
             ROS_ERROR("Failed to get parameter alt_r");
         }
@@ -296,7 +318,7 @@ public:
         ref = Ref_syst(gps_r, ecef_r);
         prec_pose = ENU_coord(ecef_r, ref);
 
-        ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", lat_r, lon_r, alt_r, ecef_r.x, ecef_r.y, ecef_r.z, prec_pose.x, prec_pose.y, prec_pose.z);
+        ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f \n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", lat_r, lon_r, alt_r, ecef_r.x, ecef_r.y, ecef_r.z, prec_pose.x, prec_pose.y, prec_pose.z);
     }
 };
 

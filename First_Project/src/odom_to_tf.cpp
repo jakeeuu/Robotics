@@ -54,12 +54,7 @@ public:
 
         sub = n.subscribe<nav_msgs::Odometry>(input_odom, 1, &odom_to_tf::callback, this );
 
-        /*
-        ros::ROS_INFO("->odom_to_tf node initilized with : ");
-        ros::ROS_INFO("     - input_odom : %s", input_odom);
-        ros::ROS_INFO("     - root_frame : %s", root_frame);
-        ros::ROS_INFO("     - child_frame : %s", child_frame.c_str());
-        ros::Rate loop_rate(5); */
+    
         ros::Rate loop_rate(5);
 
         while (ros::ok())
@@ -75,11 +70,6 @@ public:
         tf::Transform transform; // tf message
 
         current_time = ros::Time::now();
-
-        /* USELESS ?????
-        transform.header.stamp = current_time;
-        transform.header.frame_id = root_frame;
-        transform.child_frame_id = child_frame; */
 
         // Extracting position and orientation from odometry message
         tf::Quaternion q(
