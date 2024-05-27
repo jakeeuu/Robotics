@@ -1,0 +1,9 @@
+<launch>
+    
+    <node pkg="second_project" type="pointcloud_to_laserscan" name="pointcloud_to_laserscan" output="screen"> </node>
+
+    <include file="$(find second_project)/launch/gmapping.launch"/>
+
+     
+</launch>
+
