@@ -9,6 +9,26 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
+/*
+
+publish:
+- odometry message:
+    - type: nav_msgs/Odometry
+    - topic name: gps_odom
+
+- to convert gps data to odometry:
+    - convert (latitude-longitude-altitude) to Cartesian ECEF
+    - convert Cartesian ECEF to ENU
+    - ENU is a relative position, so you need to specify the reference point
+
+- gps_to_odom have three parameters :
+    - lat_r
+    - lon_r
+    - alt_r
+- These parameters are set in the launch file
+
+*/
+
 std::vector<double> vectorial_mult(const std::vector<std::vector<double>> &matrix, const std::vector<double> &vect)
 {
     std::vector<double> res(matrix.size(), 0);
@@ -27,6 +47,7 @@ class gps_coord
 {
 
 public:
+
     double latitude;  // in radiants
     double longitude; // in radiants
     double altitude;  // in radiants
@@ -167,7 +188,7 @@ public:
 
         res = vectorial_mult(ref_syst.matrix, diff);
 
-        // result without rotattion adjustments
+        // result without rotation adjustments
         x = res[0];
         y = res[1];
         z = res[2];
@@ -199,7 +220,7 @@ private:
         // Calculate yaw (heading) angle
         double yaw = atan2(dy, dx);
 
-        // Calculate pitch angle
+        // Calculate pitch angle, the pitch is not necessary
         double pitch = atan2(-dz, sqrt(dx * dx + dy * dy));
 
         // Convert Euler angles to quaternion
@@ -265,10 +286,9 @@ public:
 
         pub.publish(odom);
 
-        // ROS_INFO("-----------------------%d\n   input gps: lat=%f , long=%f, height=%f \n   enu: x=%f , y=%f , z=%f \n ",odom_seq_id, latitude, longitude, altitude, odom.pose.pose.position.x, odom.pose.pose.position.y, odom.pose.pose.position.z);
-
         odom_seq_id += 1;
         prec_pose = enu;
+        
     }
 
     void set_ref()
@@ -286,7 +306,7 @@ public:
         {
             ROS_ERROR("Failed to get parameter lon_r");
         }
-        if (!private_n.getParam("lon_r", alt_r))
+        if (!private_n.getParam("alt_r", alt_r))
         {
             ROS_ERROR("Failed to get parameter alt_r");
         }
@@ -296,7 +316,7 @@ public:
         ref = Ref_syst(gps_r, ecef_r);
         prec_pose = ENU_coord(ecef_r, ref);
 
-        ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f\n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", lat_r, lon_r, alt_r, ecef_r.x, ecef_r.y, ecef_r.z, prec_pose.x, prec_pose.y, prec_pose.z);
+        ROS_INFO("----------reference system\n lat=%f , long=%f, height=%f \n ecef: x=%f , y=%f , z=%f\n enu: x=%f , y=%f , z=%f\n", lat_r, lon_r, alt_r, ecef_r.x, ecef_r.y, ecef_r.z, prec_pose.x, prec_pose.y, prec_pose.z);
     }
 };
 

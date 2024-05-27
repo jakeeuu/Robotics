@@ -33,21 +33,12 @@
 </launch>
 
 <!-- 
+    
 reference system coordinates
 
-1st frame:
 latitude: 45.477669461666665
 longitude: 9.22674018
 altitude: 169.039
 
-2nd frame:
-latitude: 45.47766944833333
-longitude: 9.226740176666667
-altitude: 169.041
-
-3rd frame:
-latitude: 45.477669438333336
-longitude: 9.226740146666666
-altitude: 169.037
 -->
 
