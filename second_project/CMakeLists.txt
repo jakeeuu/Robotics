@@ -16,9 +16,10 @@ include_directories(
 )
 
 add_executable(pointcloud_to_laserscan src/pointcloud_to_laserscan.cpp)
+add_executable(ugv_odom_to_tf src/ugv_odom_to_tf.cpp)
 
-target_link_libraries(pointcloud_to_laserscan
-  ${catkin_LIBRARIES}
-)
+target_link_libraries( pointcloud_to_laserscan ${catkin_LIBRARIES} )
+target_link_libraries( ugv_odom_to_tf ${catkin_LIBRARIES} )
+
 
 
