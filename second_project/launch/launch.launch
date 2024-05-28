@@ -1,9 +1,20 @@
 <launch>
     
-    <node pkg="second_project" type="pointcloud_to_laserscan" name="pointcloud_to_laserscan" output="screen"> </node>
+    <!-- Node that converts point cloud to laser scan -->
+    <node pkg="second_project" type="pointcloud_to_laserscan" name="pointcloud_to_laserscan" output="screen">
+        <param name="base_frame" value="base_link"/>
+        <param name="laser_frame" value="laser_frame"/>
+    </node>
+    
+    <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen"> </node>
 
     <include file="$(find second_project)/launch/gmapping.launch"/>
 
-     
+    
 </launch>
 
+<!-- Static transform from base_link to laser_frame 
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
+    
+-->
