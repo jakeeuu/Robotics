@@ -5,6 +5,7 @@
         <param name="base_frame" value="base_link"/>
         <param name="laser_frame" value="laser_frame"/>
     </node>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
     
     <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen"> </node>
 
