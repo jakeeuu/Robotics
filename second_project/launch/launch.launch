@@ -10,11 +10,8 @@
 
     <include file="$(find second_project)/launch/gmapping.launch"/>
 
-    
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
+
 </launch>
 
-<!-- Static transform from base_link to laser_frame 
 
-    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
-    
--->
