@@ -1,0 +1,9 @@
+<launch>
+  <!-- Start the mapping node -->
+  <node pkg="smal_toolbox" type="mapping_node" name="mapping_node" output="screen">
+    <!-- Remap topics if necessary -->
+    <remap from="/scan" to="/scan" />
+    <remap from="/odom" to="/ugv/odom" />
+  </node>
+
+</launch>

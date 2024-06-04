@@ -5,14 +5,22 @@
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     static tf::TransformBroadcaster br;
-    tf::Transform transform;
+    static ros::Time last_stamp;
 
-    transform.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
-    tf::Quaternion q;
-    tf::quaternionMsgToTF(msg->pose.pose.orientation, q);
-    transform.setRotation(q);
+    // Only broadcast if the timestamp is new
+    if (msg->header.stamp != last_stamp)
+    {
+        tf::Transform transform;
+        transform.setOrigin(tf::Vector3(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z));
 
-    br.sendTransform(tf::StampedTransform(transform, msg->header.stamp, "odom", "base_link"));
+        tf::Quaternion q;
+        tf::quaternionMsgToTF(msg->pose.pose.orientation, q);
+        transform.setRotation(q);
+
+        br.sendTransform(tf::StampedTransform(transform, msg->header.stamp, "odom", "base_link"));
+
+        last_stamp = msg->header.stamp;  // Update last_stamp
+    }
 }
 
 int main(int argc, char** argv)
