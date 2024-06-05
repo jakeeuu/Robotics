@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 // Function to read goals from the CSV file
 std::vector<geometry_msgs::PoseStamped> readGoals(const std::string& file_path) {
@@ -40,7 +41,7 @@ std::vector<geometry_msgs::PoseStamped> readGoals(const std::string& file_path) 
 
         // Read orientation theta
         std::getline(ss, token, ',');
-        std::float theta = std::stof(token);
+        float theta = std::stof(token);
 
         // orientation x
         goal.pose.orientation.x = sin(theta / 2);
