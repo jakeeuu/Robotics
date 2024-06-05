@@ -5,38 +5,41 @@
 
     <!-- Static transform from base_link to rslidar -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_rslidar" 
-            args="0 0 0 0 0 0 1 base_link rslidar" />
+          args="0 0 0.245 0 0 0 1 base_link rslidar" /> 
 
     <!-- Static transform from base_link to laser_frame -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_laser_frame" 
-            args="0 0 0 0 0 0 1 base_link laser_frame" />
+          args="0 0 0.245 0 0 0 1 base_link laser_frame" />
 
     <!-- Node that converts point cloud to laser scan -->
     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" output="screen">
+        <!-- Topic remapping -->
         <remap from="cloud_in" to="/ugv/rslidar_points" />
         <param name="target_frame" value="laser_frame"/>
+        <param name="transform_tolerance" value="0.1"/>
         <param name="min_height" value="0.0"/>
         <param name="max_height" value="1.0"/>
         <param name="angle_min" value="-1.5708"/>
         <param name="angle_max" value="1.5708"/>
-        <param name="angle_increment" value="0.0087"/>
+        <param name="angle_increment" value="0.00872665"/>
         <param name="scan_time" value="0.1"/>
-        <param name="range_min" value="0.0"/>
-        <param name="range_max" value="100.0"/>
-        <param name="use_inf" value="false"/>
+        <param name="range_min" value="0.45"/>
+        <param name="range_max" value="10.0"/>
+        <param name="use_inf" value="true"/>
         <param name="inf_epsilon" value="1.0"/>
+        <remap from="scan" to="/scan" /> <!-- Ensure this matches with the scan topic in Gmapping -->
     </node>
     <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
     
-    <!-- node to bublish odom on tf-->
-    <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen"> </node>
+    <!-- Node to publish odom on tf-->
+    <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen" />
 
-    <!-- gmapping node with fine tuning-->
+    <!-- Gmapping node with fine-tuning parameters-->
     <include file="$(find second_project)/launch/gmapping.launch"/>
 
-    <!-- starting rviz-->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/cfg/rviz_config.rviz"/>
-
+    <!-- Starting RViz-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/cfg/rviz_config.rviz" />
+    
     <!-- Launch rqt_tf_tree    
         <node pkg="rqt_tf_tree" type="rqt_tf_tree" name="rqt_tf_tree" output="screen" />
     -->
@@ -44,7 +47,5 @@
     <!-- Launch rqt_graph 
         <node pkg="rqt_graph" type="rqt_graph" name="rqt_graph" output="screen" />
     -->
-    
-    
-</launch>
 
+</launch>
