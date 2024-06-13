@@ -39,6 +39,9 @@
     <param name="lasamplestep" value="0.025"/> 
     <param name="transform_publish_period" value="0.05"/>
     <param name="occ_thresh" value="0.25"/>
+
+    <param name="tf_delay" value="0.4"/>
+    <param name="queue_size" value="100"/>
     </node>
 
 </launch>
