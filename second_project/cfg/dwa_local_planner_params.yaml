@@ -4,7 +4,7 @@ DWAPlannerROS:
   max_vel_x: 0.5  # 0.55
   min_vel_x: 0.0 
 
-	# essendo un differential drive robot non ho velocità laterali
+# essendo un differential drive robot non ho velocità laterali
   max_vel_y: 0.0  # diff drive robot
   min_vel_y: 0.0  # diff drive robot
 

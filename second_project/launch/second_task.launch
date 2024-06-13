@@ -5,7 +5,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
   <!-- Name of the map to use and initial position -->
   <arg name="map_file"       default="$(find second_project)/maps/map.yaml"/> 
-  <arg name="world_file"     default="$(find second_project)/stage/maze.world"/>
+  <arg name="world_file"     default="$(find second_project)/maps/stage/maze.world"/>
   <arg name="initial_pose_x" default="0.0"/> <!--posizione iniziale del robot-->
   <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
