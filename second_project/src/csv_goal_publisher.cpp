@@ -1,4 +1,4 @@
-
+/*
 #include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
@@ -104,3 +104,4 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+*/
