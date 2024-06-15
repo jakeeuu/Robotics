@@ -1,13 +1,13 @@
 DWAPlannerROS:
-
+#AAAAAAAAAAAAAAAAAAAAAA
 # Robot Configuration Parameters - Kobuki
-  max_vel_x: 0.5  # 0.55
-  min_vel_x: 0.0 
+  max_vel_x: 0.5  
+  min_vel_x: -0.5
 
-# essendo un differential drive robot non ho velocità laterali
-  max_vel_y: 0.0  # diff drive robot
-  min_vel_y: 0.0  # diff drive robot
-
+#AAAAAAAAAAAAAAAAAAAAAA
+  max_vel_y: 0.0  
+  min_vel_y: 0.0 
+#AAAAAAAAAAAAAAAAAAAAAA
  #velocità del robot basata sulle capacità fisiche del robot (che può essere diversa da quella indicata sopra)
   max_trans_vel: 3.0 # choose slightly less than the base's capability
   # la minimum speed per come è fatto ros non va mai messa a 0
@@ -24,7 +24,7 @@ DWAPlannerROS:
   
   acc_lim_x: 0.5 # maximum is theoretically 2.0, but we don't want to crash/do strange stuff/overshoot
   acc_lim_theta: 1.0 #rad
-  acc_lim_y: 0.0      # diff drive robot
+  acc_lim_y: 0.5      # diff drive robot
 
 # Goal Tolerance Parameters
   yaw_goal_tolerance: 0.3  # 0.05

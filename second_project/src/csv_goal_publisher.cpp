@@ -44,13 +44,13 @@ std::vector<geometry_msgs::PoseStamped> readGoals(const std::string& file_path) 
         float theta = std::stof(token);
 
         // orientation x
-        goal.pose.orientation.x = sin(theta / 2);
+        goal.pose.orientation.x = 0;
 
         // orientation w
         goal.pose.orientation.w = cos(theta / 2);
 
         goal.pose.orientation.y = 0;
-        goal.pose.orientation.z = 0;
+        goal.pose.orientation.z = sin(theta / 2);
 
         goals.push_back(goal);
     }

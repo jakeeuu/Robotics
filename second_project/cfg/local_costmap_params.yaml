@@ -4,9 +4,9 @@ local_costmap:
    update_frequency: 5.0
    publish_frequency: 2.0
    static_map: false
-   rolling_window: true # è una window type map nel senso che si muove nella "finestra" attorno alla posizione del robot
+   rolling_window: true # è una window type map nel senso che si muove nella "finestra" attorno alla posizione del robot 
    width: 6.0 # horizon in cui voglio che si espanda la local map attorno al robot (non deve essere troppo grande se no diventa difficile tenere dinamicamente una grossa mappa)
-   height: 6.0
+   height: 6.0 #AAAAAAAAAAAAAAAAAAAAAA
    resolution: 0.05
    transform_tolerance: 0.5 #maximum amount of latency allowed between tf
    plugins:

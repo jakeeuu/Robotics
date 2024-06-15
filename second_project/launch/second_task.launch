@@ -7,10 +7,10 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
   <arg name="map_file"       default="$(find second_project)/maps/map.yaml"/> 
   <arg name="world_file"     default="$(find second_project)/maps/stage/maze.world"/>
   <arg name="initial_pose_x" default="0.0"/> <!--posizione iniziale del robot-->
-  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/><!--AAAAAAAAAAAAAAAAAAAAAA--> 
   <arg name="initial_pose_a" default="0.0"/>
 
-  <arg name="odom_frame_id"   default="ugv/odom"/>
+  <arg name="odom_frame_id"   default="odom"/>
   <arg name="global_frame_id" default="map"/>
 
   <param name="/use_sim_time" value="true"/><!--scegliamo il simulated time del bag file-->
@@ -26,7 +26,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
   <!--  ***************** Robot Model *****************  -->
   <!--per avere il robot model dentro rviz (non è obbligatorio)-->
-  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml"> <!--AAAAAAAAAAAAAAAAAAAAAA-->
     <arg name="model" value="$(arg base)" />
   </include>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -46,14 +46,15 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <rosparam file="$(find second_project)/cfg/move_base_params.yaml" command="load" /> 
 
     <param name="base_global_planner" value="navfn/NavfnROS" />  <!--   planner  navfn/NavfnROS alternative  carrot_planner/CarrotPlanner -->
-    <param name="planner_frequency" value="1.0" />
+    <param name="planner_frequency" value="1.0" /><!--AAAAAAAAAAAAAAAAAAAAAA-->
     <param name="planner_patience" value="5.0" /> <!-- How long the planner will wait in seconds in an attempt to find a valid plan before space-clearing operations are performed.  -->
 
     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-    <param name="controller_frequency" value="5.0" />
+    <param name="controller_frequency" value="5.0" /><!--più alto del global planner--><!--AAAAAAAAAAAAAAAAAAAAAA-->
     <param name="controller_patience" value="5.0" /> <!-- How long the controller will wait in seconds without receiving a valid control before space-clearing operations are performed.  -->
 
-    <param name="clearing_rotation_allowed" value="true"/> <!--per dire che uso un robot che può ruotare sul posto-->
+    <param name="clearing_rotation_allowed" value="false"/> <!--per dire che uso un robot che può ruotare sul posto-->
+    <!--AAAAAAAAAAAAAAAAAAAAAA-->
   </node>
 
 
@@ -78,6 +79,6 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
 
   <!--  ************* Read goal from csv ***********  -->
-  <node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher"/>
+  <!--node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher"/-->
 
 </launch>

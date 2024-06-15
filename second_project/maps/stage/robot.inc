@@ -1,6 +1,5 @@
-####TODOOOOOOOOOOOOOO TUTTO
 
-define kinect ranger
+define laser ranger
 (
   sensor
   (
@@ -17,18 +16,18 @@ define kinect ranger
 
 define turtlebot position
 (
-  pose [ 0.0 0.0 0.0 0.0 ]
+  pose [  0.0 0.0 0.0 0.0 ]
   
   localization "odom"
 
 
   odom_error [0.2 0.2 0.0 0.3 ]
 
-  size [ .612 0.580 0.40 ]
+  size [ 0.612 0.580 0.40 ]
   origin [ 0.0 0.0 0.0 0.0 ]
   gui_nose 1
-  drive "diff"
+  drive "omni" #AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   color "grey"
   
-  kinect()
+  laser()
 )
