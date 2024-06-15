@@ -26,7 +26,7 @@ define turtlebot position
   size [ 0.612 0.580 0.40 ]
   origin [ 0.0 0.0 0.0 0.0 ]
   gui_nose 1
-  drive "omni" #AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  drive "omni" 
   color "grey"
   
   laser()
