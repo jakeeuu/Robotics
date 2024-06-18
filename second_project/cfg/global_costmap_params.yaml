@@ -1,11 +1,18 @@
+
+
 global_costmap:
-   
-   global_frame: map
-   robot_base_frame: base_footprint
-   update_frequency: 1.0
-   publish_frequency: 0.5
-   static_map: true
-   transform_tolerance: 0.5
-   plugins:
-     - {name: static_layer,            type: "costmap_2d::StaticLayer"}
-     - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+
+   global_frame: map  # Reference frame for the global costmap.
+   robot_base_frame: base_footprint  # Frame attached to the robot's base.
+   update_frequency: 5.0  # Frequency in Hz at which the global costmap updates.
+   publish_frequency: 2.0  # Frequency in Hz at which the global costmap is published.
+   static_map: true  # Use a static map for the global costmap.
+   rolling_window: false  # The global costmap does not move with the robot.
+   width: 50.0  # Width of the global costmap in meters.
+   height: 50.0  # Height of the global costmap in meters.
+   resolution: 0.05  # Resolution of the global costmap in meters/cell.
+   transform_tolerance: 0.5  # Maximum allowed latency for transform data.
+   plugins:  # List of plugins to use with the global costmap.
+    - {name: static_layer, type: "costmap_2d::StaticLayer"}  # Plugin for handling static obstacles from the map.
+    - {name: obstacle_layer, type: "costmap_2d::VoxelLayer"}  # Plugin for handling dynamic obstacles.
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}  # Plugin for inflating obstacles to create a safety buffer.
