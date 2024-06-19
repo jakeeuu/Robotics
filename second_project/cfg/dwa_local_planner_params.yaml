@@ -1,58 +1,52 @@
 DWAPlannerROS:
-#AAAAAAAAAAAAAAAAAAAAAA
-# Robot Configuration Parameters - Kobuki
-  max_vel_x: 0.5  
-  min_vel_x: -0.5
 
-#AAAAAAAAAAAAAAAAAAAAAA
-  max_vel_y: 0.0  
-  min_vel_y: 0.0 
-#AAAAAAAAAAAAAAAAAAAAAA
- #velocità del robot basata sulle capacità fisiche del robot (che può essere diversa da quella indicata sopra)
-  max_trans_vel: 3.0 # choose slightly less than the base's capability
-  # la minimum speed per come è fatto ros non va mai messa a 0
-  min_trans_vel: 0.1  # this is the min trans velocity when there is negligible rotational velocity
-  trans_stopped_vel: 0.1
+  # Robot Configuration Parameters 
+  max_vel_x: 0.5             # Maximum forward linear velocity in m/s
+  min_vel_x: -0.5            # Maximum backward linear velocity in m/s
+  max_vel_y: 0.0              # Maximum lateral velocity in m/s (0.0 for differential drive robots)
+  min_vel_y: 0.0             # Minimum lateral velocity in m/s (0.0 for differential drive robots)
 
-  # Warning!
-  #   do not set min_trans_vel to 0.0 otherwise dwa will always think translational velocities
-  #   are non-negligible and small in place rotational velocities will be created.
+  # Robot's physical velocity limits
+  max_vel_trans: 3.0         # Maximum translational velocity (usually slightly less than the robot's capability)
+  min_vel_trans: 0.1         # Minimum translational velocity (should not be set to 0.0 to avoid in-place rotations)
+  trans_stopped_vel: 0.1     # Threshold below which translational velocity is considered zero
 
-  max_rot_vel: 3.0  # choose slightly less than the base's capability
-  min_rot_vel: 0.4  # this is the min angular velocity when there is negligible translational velocity
-  rot_stopped_vel: 0.4
-  
-  acc_lim_x: 0.5 # maximum is theoretically 2.0, but we don't want to crash/do strange stuff/overshoot
-  acc_lim_theta: 1.0 #rad
-  acc_lim_y: 0.5      # diff drive robot
+  # Angular velocity limits
+  max_vel_theta: 3.0         # Maximum rotational velocity in rad/s
+  min_vel_theta: 0.1        # Minimum rotational velocity (non-zero to avoid in-place rotations)
+  theta_stopped_vel: 0.4     # Threshold below which rotational velocity is considered zero
 
-# Goal Tolerance Parameters
-  yaw_goal_tolerance: 0.3  # 0.05
-  xy_goal_tolerance: 0.10  # 0.10
+  # Acceleration limits
+  acc_lim_x: 0.5             # Maximum linear acceleration in m/s^2 (limited to avoid crashes)
+  acc_lim_theta: 1.0         # Maximum angular acceleration in rad/s^2
+  acc_lim_y: 0.5             # Maximum lateral acceleration in m/s^2 (not relevant for differential drive robots)
 
+  # Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.3    # Angular tolerance to consider the goal reached in radians
+  xy_goal_tolerance: 0.10    # Linear tolerance to consider the goal reached in meters
 
-# Forward Simulation Parameters
-#per quanto tempo voglio simulare la trajectory del robot
-  sim_time: 2.0       # 1.7 The amount of time to forward-simulate trajectories in seconds
-  vx_samples: 3       # 3 The number of samples to use when exploring the x velocity space
-  vy_samples: 10       # diff drive robot
-  vtheta_samples: 20  # 20
+  # Forward Simulation Parameters
+  sim_time: 2.0              # Duration of trajectory simulation in seconds
+  vx_samples: 3              # Number of velocity samples in the x direction
+  vy_samples: 10             # Number of velocity samples in the y direction (for holonomic robots)
+  vtheta_samples: 20         # Number of velocity samples for rotational velocity
 
-# Trajectory Scoring Parameters
-#cost =   path_distance_bias * (distance to path from the endpoint of the trajectory in meters)   + goal_distance_bias * (distance to local goal from the endpoint of the trajectory in meters)   + occdist_scale * (maximum obstacle cost along the trajectory in obstacle cost (0-254))
-  path_distance_bias: 32.0      # 32.0   - weighting for how much it should stick to the global path plan
-  goal_distance_bias: 24.0      # 24.0   - wighting for how much it should attempt to reach its goal
-  occdist_scale: 0.01            # 0.01   - weighting for how much the controller should avoid obstacles
-  forward_point_distance: 0.25 # 0.325  - how far along to place an additional scoring point
-  stop_time_buffer: 0.2         # 0.2    - amount of time a robot must stop in before colliding for a valid traj.
-  scaling_speed: 0.25           # 0.25   - absolute velocity at which to start scaling the robot's footprint
-  max_scaling_factor: 0.2       # 0.2    - how much to scale the robot's footprint when at speed.
-  
-# Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.15  # 0.05   - how far to travel before resetting oscillation flags
+  # Trajectory Scoring Parameters
+  # Cost function components: path adherence, goal reaching, obstacle avoidance
+  path_distance_bias: 32.0   # Weight for adherence to the global path
+  goal_distance_bias: 24.0   # Weight for progress towards the goal
+  occdist_scale: 0.01        # Weight for obstacle avoidance
+  forward_point_distance: 0.25 # Distance to place an additional scoring point ahead of the robot
+  stop_time_buffer: 0.2      # Time buffer to ensure the robot stops before colliding
+  scaling_speed: 0.25        # Speed at which to start scaling the robot's footprint
+  max_scaling_factor: 0.2    # Maximum scaling factor for the robot's footprint
 
-# Debugging
-  publish_traj_pc : true
-  publish_cost_grid_pc: true
-  publish_cost_grid: true
-  global_frame_id: odom
+  # Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.15 # Distance to travel before resetting oscillation flags
+
+  # Debugging
+  publish_traj_pc: true      # Publish planned trajectories for debugging
+  publish_cost_grid_pc: true # Publish cost grid for debugging
+  publish_cost_grid: true    # Publish cost grid information
+  global_frame_id: odom      # Global frame of reference for the planner
+

@@ -9,7 +9,7 @@
 
     <!-- Static transform from base_link to laser_frame -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_laser_frame" 
-          args="0 0 0.245 0 0 0 1 base_link laser_frame" />
+          args="0 0 0 0 0 0 1 base_link laser_frame" />
 
     <!-- Node that converts point cloud to laser scan -->
     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" output="screen">
@@ -29,7 +29,6 @@
         <param name="inf_epsilon" value="1.0"/>
         <remap from="scan" to="/scan" /> <!-- Ensure this matches with the scan topic in Gmapping -->
     </node>
-    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_laser" args="0 0 0.1 0 0 0 base_link laser_frame" />
     
     <!-- Node to publish odom on tf-->
     <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen" />
