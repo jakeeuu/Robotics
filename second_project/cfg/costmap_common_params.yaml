@@ -1,6 +1,6 @@
 # Obstacle Cost Shaping
 # (http://wiki.ros.org/costmap_2d/hydro/inflation)
-footprint: [[0.306, 0.29], [0.306, -0.29], [-0.306, -0.29], [-0.306, 0.29]] # The robot's footprint coordinates defining its shape for obstacle avoidance.
+footprint: [[0.306, 0.29], [0.306, -0.29], [-0.306, -0.29], [-0.306, 0.29]] # The robot's footprint coordinates defining its shape for obstacle avoidance. See https://global.agilex.ai/products/scout-mini
 
 map_type: costmap_2d  # Type of the map used for navigation (costmap_2d is a 2D occupancy grid).
 

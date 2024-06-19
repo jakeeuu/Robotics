@@ -1,6 +1,6 @@
 DWAPlannerROS:
 
-  # Robot Configuration Parameters - Kobuki
+  # Robot Configuration Parameters 
   max_vel_x: 0.5             # Maximum forward linear velocity in m/s
   min_vel_x: -0.5            # Maximum backward linear velocity in m/s
   max_vel_y: 0.0              # Maximum lateral velocity in m/s (0.0 for differential drive robots)
@@ -8,12 +8,12 @@ DWAPlannerROS:
 
   # Robot's physical velocity limits
   max_vel_trans: 3.0         # Maximum translational velocity (usually slightly less than the robot's capability)
-  min_vel_trans: 1.0         # Minimum translational velocity (should not be set to 0.0 to avoid in-place rotations)
+  min_vel_trans: 0.1         # Minimum translational velocity (should not be set to 0.0 to avoid in-place rotations)
   trans_stopped_vel: 0.1     # Threshold below which translational velocity is considered zero
 
   # Angular velocity limits
   max_vel_theta: 3.0         # Maximum rotational velocity in rad/s
-  min_vel_theta: 0.0         # Minimum rotational velocity (non-zero to avoid in-place rotations)
+  min_vel_theta: 0.1        # Minimum rotational velocity (non-zero to avoid in-place rotations)
   theta_stopped_vel: 0.4     # Threshold below which rotational velocity is considered zero
 
   # Acceleration limits
@@ -49,3 +49,4 @@ DWAPlannerROS:
   publish_cost_grid_pc: true # Publish cost grid for debugging
   publish_cost_grid: true    # Publish cost grid information
   global_frame_id: odom      # Global frame of reference for the planner
+
