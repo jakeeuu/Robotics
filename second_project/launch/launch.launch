@@ -35,13 +35,15 @@
 
     <!-- Gmapping node with fine-tuning parameters-->
     <!-- 
-    <include file="$(find second_project)/launch/gmapping.launch"/>
+        <include file="$(find second_project)/launch/gmapping.launch"/>
+
     -->
 
     <!-- Slam toolbox -->
     <!--
     <include file="$(find second_project)/launch/slam_toolbox.launch"/>
     <include file="$(find second_project)/launch/slam_toolbox_localization.launch"/>
+    
     -->
     <include file="$(find second_project)/launch/slam_toolbox_default.launch"/>
 
