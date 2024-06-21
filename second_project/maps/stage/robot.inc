@@ -5,7 +5,7 @@ define laser ranger
   (
     pose [ -0.1 0.0 -0.11 0.0 ]  # Position and orientation of the laser sensor
     size [ 0.1 0.1 0.1 ]         # Physical dimensions of the sensor
-    range [ 0.2 150 ]            # Minimum and maximum range in meters
+    range [ 0.2 140 ]            # Minimum and maximum range in meters
     fov 360.0                    # Field of view in degrees
     samples 1440                 # Number of samples within the FOV
   )

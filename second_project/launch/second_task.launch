@@ -47,11 +47,11 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <rosparam file="$(find second_project)/cfg/move_base_params.yaml" command="load" /> 
 
     <param name="base_global_planner" value="navfn/NavfnROS" />  <!--   planner  navfn/NavfnROS alternative  carrot_planner/CarrotPlanner -->
-    <param name="planner_frequency" value="1.0" /><!--AAAAAAAAAAAAAAAAAAAAAA-->
+    <param name="planner_frequency" value="10.0" /><!--AAAAAAAAAAAAAAAAAAAAAA-->
     <param name="planner_patience" value="5.0" /> <!-- How long the planner will wait in seconds in an attempt to find a valid plan before space-clearing operations are performed.  -->
 
     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-    <param name="controller_frequency" value="10.0" /><!--più alto del global planner--><!--AAAAAAAAAAAAAAAAAAAAAA-->
+    <param name="controller_frequency" value="20.0" /><!--più alto del global planner--><!--AAAAAAAAAAAAAAAAAAAAAA-->
     <param name="controller_patience" value="5.0" /> <!-- How long the controller will wait in seconds without receiving a valid control before space-clearing operations are performed.  -->
 
     <param name="clearing_rotation_allowed" value="false"/> <!--per dire che uso un robot che può ruotare sul posto-->

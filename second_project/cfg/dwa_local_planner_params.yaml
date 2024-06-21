@@ -49,4 +49,3 @@ DWAPlannerROS:
   publish_cost_grid_pc: true # Publish cost grid for debugging
   publish_cost_grid: true    # Publish cost grid information
   global_frame_id: odom      # Global frame of reference for the planner
-

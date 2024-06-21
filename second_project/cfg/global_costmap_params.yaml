@@ -1,5 +1,6 @@
 
 
+
 global_costmap:
 
    global_frame: map  # Reference frame for the global costmap.
