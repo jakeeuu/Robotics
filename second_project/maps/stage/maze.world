@@ -21,24 +21,24 @@ interval_sim 100 # simulation timestep in milliseconds
 
 window
 (
-  size [ 600.0 700.0 ]
-  center [ 0.0 0.0 ]
-  rotate [ 0.0 0.0 ]
-  scale 60
+  size [ 600 700 ]
+  center [ 19.083 2.584 ]
+  rotate [ 0.000 0.000 ]
+  scale 14.364
 )
 
 floorplan
 (
   name "maze"
   bitmap "../map.pgm"
-  size [ 31.25 17.5 2.0 ]  
-  pose [ 11.43 -4.40 0.0 0.0 ]  
+  size [ 62.650 36.000 2.000 ]  # [ 66.0 33.0 2.000 ]  rapporto costante x/y=1.74027777778
+  pose [ 23.39 -10.27 0.000 0.000 ] #[ 11.580 -4.670 0.000 0.000 ]
 )
 
 # throw in a robot
-turtlebot
+turtlebot # **************** try "bot" instead of "turtlebot"
 (
-  pose [ 0.0 0.0 0.0 0.0 ]
+  pose [ 0.000 0.000 0.000 0.000 ]
   name "robrot"
   color "black"
 )

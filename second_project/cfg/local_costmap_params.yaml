@@ -1,12 +1,12 @@
 local_costmap:
    global_frame: odom  # Reference frame for the local costmap; 'odom' means it moves with the robot.
    robot_base_frame: base_footprint  # Frame attached to the robot's base.
-   update_frequency: 5.0  # Frequency in Hz at which the local costmap updates.
+   update_frequency: 10.0  # Frequency in Hz at which the local costmap updates.
    publish_frequency: 2.0  # Frequency in Hz at which the local costmap is published.
    rolling_window: true  # The local costmap moves with the robot, keeping the robot centered.
-   width: 6.0  # Width of the local costmap in meters. Defines the horizontal extent of the map around the robot.
-   height: 6.0  # Height of the local costmap in meters. Defines the vertical extent of the map around the robot.
-   resolution: 0.05  # Resolution of the local costmap in meters/cell.
+   width: 3.0  # Width of the local costmap in meters. Defines the horizontal extent of the map around the robot.
+   height: 3.0  # Height of the local costmap in meters. Defines the vertical extent of the map around the robot.
+   resolution: 0.025  # Resolution of the local costmap in meters/cell.
    transform_tolerance: 0.5  # Maximum allowed latency for transform data.
    plugins:  # List of plugins to use with the local costmap.
     - {name: obstacle_layer, type: "costmap_2d::VoxelLayer"}  # Plugin for handling obstacles using voxel layers.

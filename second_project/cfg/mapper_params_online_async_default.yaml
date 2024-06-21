@@ -9,7 +9,7 @@ ceres_loss_function: None
 # ROS Parameters
 odom_frame: odom
 map_frame: map
-base_frame: base_link
+base_frame: base_link # ************** try base_footprint
 scan_topic: /scan
 mode: mapping #localization
 
@@ -22,9 +22,9 @@ mode: mapping #localization
 
 debug_logging: false
 throttle_scans: 1
-transform_publish_period: 0.02 #if 0 never publishes odometry
+transform_publish_period: 0.01 #if 0 never publishes odometry
 map_update_interval: 2.0
-resolution: 0.025
+resolution: 0.025 
 max_laser_range: 10.0 #for rastering images
 minimum_time_interval: 0.2
 transform_timeout: 0.2
