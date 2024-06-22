@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "csv_goal_publisher");
     ros::NodeHandle nh;
 
-    // Path to the CSV file (change this to your file path)
+    // Path to the CSV file
     std::string file_path = std::string(ros::package::getPath("second_project")) + "/csv/waypoints.csv";
     std::vector<geometry_msgs::PoseStamped> goals = readGoals(file_path);
 
@@ -91,7 +91,6 @@ int main(int argc, char** argv) {
     for (const auto& goal : goals) {
         sendGoal(ac, goal);
 
-        // Wait for the result
         ac.waitForResult();
 
         if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {

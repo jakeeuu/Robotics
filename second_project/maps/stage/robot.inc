@@ -6,7 +6,7 @@ define laser ranger
     # size [ 0.1 0.1 0.1 ]         # Physical dimensions of the sensor
     range [ 0.2 150 ]            # Minimum and maximum range in meters
     fov 360.0                    # Field of view in degrees
-    samples 1440                 # Number of samples within the FOV ********************** try lower
+    samples 1440                 # Number of samples within the FOV
   )
   # generic model properties
   color "black"

@@ -1,23 +1,20 @@
 <launch>
-	<!--creiamo il nostro simulated robot dentro rviz, 'burger' è un tipo di model di turtlebot-->
-  <arg name="base"       default="burger"/>  <!-- create_circles_asus_xtion_pro create_circles_kinect kobuki_hexagons_astra kobuki_hexagons_asus_xtion_pro kobuki_hexagons_asus_xtion_pro 
-kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba_circles_kinect -->
+  <arg name="base"       default="burger"/> 
 
   <!-- Name of the map to use and initial position -->
   <arg name="map_file"       default="$(find second_project)/maps/map.yaml"/> 
   <arg name="world_file"     default="$(find second_project)/maps/stage/maze.world"/>
-  <arg name="initial_pose_x" default="0.0"/> <!--posizione iniziale del robot-->
+  <arg name="initial_pose_x" default="0.0"/> 
   <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
 
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="global_frame_id" default="map"/>
 
-  <param name="/use_sim_time" value="true"/><!--scegliamo il simulated time del bag file-->
+  <param name="/use_sim_time" value="true"/>
 
 
  <!--  ***************** Robot simulation *****************  -->
- <!--startiamo la simulazione del robot dal launch file passando il world_file-->
   <node pkg="stage_ros" type="stageros" name="stageros" args="$(arg world_file)">
     <param name="base_watchdog_timeout" value="0.5"/>
     <remap from="base_scan" to="scan"/>
@@ -25,8 +22,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
 
   <!--  ***************** Robot Model *****************  -->
-  <!--per avere il robot model dentro rviz (non è obbligatorio)-->
-  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml"> <!--AAAAAAAAAAAAAAAAAAAAAA-->
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml"> 
     <arg name="model" value="$(arg base)" />
   </include>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
@@ -35,8 +31,6 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
 
 
   <!--  ************** Navigation  ***************  -->
-  <!-- alcuni parametri sono condivisi tra global e local map-->
-  <!-- tutti questi parametri saranno poi settati dai vari file di configurazione (guarda sotto)-->
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
    
     <rosparam file="$(find second_project)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
@@ -47,15 +41,15 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <rosparam file="$(find second_project)/cfg/move_base_params.yaml" command="load" /> 
 
     <param name="base_global_planner" value="navfn/NavfnROS" />  <!--   planner  navfn/NavfnROS alternative  carrot_planner/CarrotPlanner -->
-    <param name="planner_frequency" value="1.0" /><!--AAAAAAAAAAAAAAAAAAAAAA-->
+    <param name="planner_frequency" value="1.0" />
     <param name="planner_patience" value="5.0" /> <!-- How long the planner will wait in seconds in an attempt to find a valid plan before space-clearing operations are performed.  -->
 
     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-    <param name="controller_frequency" value="10.0" /><!--più alto del global planner--><!--AAAAAAAAAAAAAAAAAAAAAA-->
+    <param name="controller_frequency" value="10.0" />
     <param name="controller_patience" value="5.0" /> <!-- How long the controller will wait in seconds without receiving a valid control before space-clearing operations are performed.  -->
 
-    <param name="clearing_rotation_allowed" value="false"/> <!--per dire che uso un robot che può ruotare sul posto-->
-    <!--AAAAAAAAAAAAAAAAAAAAAA-->
+    <param name="clearing_rotation_allowed" value="false"/> 
+    
   </node>
 
 
@@ -79,7 +73,7 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
   <!--  **************** Visualisation ****************  -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
 
-  <!--  ************* Read goal from csv ***********  -->
-  <node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher" >
+  <!--  ************* Rad goal from csv ***********  -->
+  <node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher"/>
 
 </launch>
