@@ -38,7 +38,7 @@
 
 
     <!-- Starting RViz-->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/cfg/rviz_config.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_mapping.rviz" />
 
 
 </launch>
