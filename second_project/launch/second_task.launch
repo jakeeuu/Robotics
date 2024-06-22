@@ -80,6 +80,6 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
 
   <!--  ************* Read goal from csv ***********  -->
-  <!--node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher"/-->
+  <node name="csv_goal_publisher" pkg="second_project" type="csv_goal_publisher" >
 
 </launch>
