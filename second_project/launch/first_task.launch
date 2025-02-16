@@ -33,6 +33,12 @@
     <!-- Node to publish odom on tf-->
     <node pkg="second_project" type="ugv_odom_to_tf" name="ugv_odom_to_tf" output="screen" />
 
+    <!-- Gmapping node with fine-tuning parameters-->
+    <!-- 
+        <include file="$(find second_project)/launch/gmapping.launch"/>
+
+    -->
+
     <!-- slam toolbox -->
     <include file="$(find second_project)/launch/slam_toolbox_default.launch"/>
 
